@@ -32,21 +32,23 @@ public class Main {
     }
 
 
-    public static boolean isChainValid() {
+    public static Boolean isChainValid() {
         Block currentBlock;
         Block previousBlock;
         String hashTarget = new String(new char[difficulty]).replace('\0', '0');
 
-        //bucle sobre la cadena para comprobar hashes
-        for (int i = 1; i < blockchain.size(); i++) {
+        //loop through blockchain to check hashes:
+        for(int i=1; i < blockchain.size(); i++) {
             currentBlock = blockchain.get(i);
-            previousBlock = blockchain.get(i - 1);
-            if (!currentBlock.hash.equals(previousBlock.hash)) {
-                System.out.println("La cadena no es válida: Los hashes actuales no coinciden");
+            previousBlock = blockchain.get(i-1);
+            //compare registered hash and calculated hash:
+            if(!currentBlock.hash.equals(currentBlock.calculateHash()) ){
+                System.out.println("Current Hashes not equal");
                 return false;
             }
-            if (!previousBlock.hash.equals(currentBlock.previousHash)) {
-                System.out.println("La cadena no es válida: Los hashes anteriores no coinciden");
+            //compare previous hash and registered previous hash
+            if(!previousBlock.hash.equals(currentBlock.previousHash) ) {
+                System.out.println("Previous Hashes not equal");
                 return false;
             }
             //check if hash is solved
@@ -54,6 +56,7 @@ public class Main {
                 System.out.println("This block hasn't been mined");
                 return false;
             }
+
         }
         return true;
     }
